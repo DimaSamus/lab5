@@ -9,7 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.example.lab5.ui.theme.MyApplicationV2Theme
+import com.example.lab5.ui.theme.Lab5Theme
+
 @Suppress("UNCHECKED_CAST")
 
 class MainActivity : ComponentActivity() {
@@ -33,10 +34,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationV2Theme {
+            Lab5Theme {
                 val state by viewModel._state.collectAsState()
                 EmployeeScreen(state = state, onEvent = viewModel::onEvent)
             }
+
         }
     }
 }
