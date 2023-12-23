@@ -1,14 +1,14 @@
-package com.example.myapplicationv2
+package com.example.lab5
 
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-@Entity(tableName = "rabotnik")
-data class Rabotnik(
+@Entity(tableName = "employee")
+data class Employee(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
     val name: String,
-    val zarplata: Int,
+    val salary: Int,
     val position: String
 
     )

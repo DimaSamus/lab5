@@ -1,4 +1,4 @@
-package com.example.myapplicationv2
+package com.example.lab5
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -33,14 +33,14 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RabotnikScreen(
-    state: RabotnikState,
-    onEvent: (RabotnikEvent) -> Unit
+fun EmployeeScreen(
+    state: EmployeeState,
+    onEvent: (EmployeeEvent) -> Unit
 ) {
 
     Scaffold (
         floatingActionButton ={
-            FloatingActionButton(onClick = { onEvent(RabotnikEvent.ShowDialog) }) {
+            FloatingActionButton(onClick = { onEvent(EmployeeEvent.ShowDialog) }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription ="add employee"
@@ -49,8 +49,8 @@ fun RabotnikScreen(
 
         }
     ){padding ->
-        if(state.isAddingRabotnik){
-            AddRabotnikDialog(state = state, onEvent = onEvent )
+        if(state.isAddingEmployee){
+            AddEmployeeDialog(state = state, onEvent = onEvent )
         }
         LazyColumn(
             contentPadding =padding,
@@ -68,7 +68,7 @@ fun RabotnikScreen(
                 ){
                 }
             }
-            items(state.rabotnik){rabotnik ->
+            items(state.employee){ employee ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,26 +83,26 @@ fun RabotnikScreen(
                     ) {
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
-                            text = "${rabotnik.name}",
+                            text = "${employee.name}",
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
-                            text = "Position: ${rabotnik.position}",
+                            text = "Position: ${employee.position}",
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             modifier = Modifier.padding(horizontal = 8.dp),
-                            text = "Total: ${rabotnik.zarplata}",
+                            text = "Total: ${employee.salary}",
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     IconButton(
                         onClick = {
-                            onEvent(RabotnikEvent.DeleteRabotnik(rabotnik))
+                            onEvent(EmployeeEvent.DeleteEmployee(employee))
                         },
                         modifier = Modifier.align(Alignment.CenterEnd)
                     ) {

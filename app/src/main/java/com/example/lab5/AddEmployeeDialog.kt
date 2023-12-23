@@ -1,18 +1,15 @@
-package com.example.myapplicationv2
+package com.example.lab5
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -27,13 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.myapplicationv2.RabotnikEvent.DeleteRabotnik
 
 @ExperimentalMaterial3Api
 @Composable
-fun AddRabotnikDialog(
-    state: RabotnikState,
-    onEvent: (RabotnikEvent) -> Unit,
+fun AddEmployeeDialog(
+    state: EmployeeState,
+    onEvent: (EmployeeEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isEfficiencyEmpty = remember { mutableStateOf(true) }
@@ -41,7 +37,7 @@ fun AddRabotnikDialog(
     AlertDialog(
         modifier = modifier.fillMaxWidth(),
         onDismissRequest = {
-            onEvent(RabotnikEvent.HideDialog)
+            onEvent(EmployeeEvent.HideDialog)
         },
         text = {
             Column(
@@ -51,7 +47,7 @@ fun AddRabotnikDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     value = state.name,
                     onValueChange = {
-                        onEvent(RabotnikEvent.SetName(it))
+                        onEvent(EmployeeEvent.SetName(it))
                     },
                     placeholder = {
                         Text(text = "Name")
@@ -59,9 +55,9 @@ fun AddRabotnikDialog(
                 )
                 TextField(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    value = state.zarplata,
+                    value = state.salary,
                     onValueChange = { newValue ->
-                        onEvent(RabotnikEvent.SetZarplata(newValue))
+                        onEvent(EmployeeEvent.SetSalary(newValue))
                     },
                     placeholder = {
                         Text(text = "Base Salary")
@@ -73,7 +69,7 @@ fun AddRabotnikDialog(
                     onValueChange = { newValue ->
                         val number = newValue.toIntOrNull()
                         if (number != null) {
-                            onEvent(RabotnikEvent.SetExperience(number.toString()))}},
+                            onEvent(EmployeeEvent.SetExperience(number.toString()))}},
                     placeholder = {
                         Text(text = "Experience")
                     }
@@ -85,7 +81,7 @@ fun AddRabotnikDialog(
                         onValueChange = { newValue ->
                             val number = newValue.toDoubleOrNull()
                             if (number != null) {
-                                onEvent(RabotnikEvent.SetEfficiency(number.toString()))
+                                onEvent(EmployeeEvent.SetEfficiency(number.toString()))
                                 isEfficiencyEmpty.value = newValue.isEmpty()
                             }
                         },
@@ -112,7 +108,7 @@ fun AddRabotnikDialog(
                     {
                         RadioButton(
                             selected = (state.position == "Developer"),
-                            onClick = { onEvent(RabotnikEvent.SetPosition("Developer")) }
+                            onClick = { onEvent(EmployeeEvent.SetPosition("Developer")) }
                         )
                         Text(text = "Developer") }
                 }
@@ -126,7 +122,7 @@ fun AddRabotnikDialog(
                 ){
                     RadioButton(
                         selected = (state.position == "Designer"),
-                        onClick = { onEvent(RabotnikEvent.SetPosition("Designer")) }
+                        onClick = { onEvent(EmployeeEvent.SetPosition("Designer")) }
                     )
                     Text(text = "Designer")
                 }}
@@ -147,7 +143,7 @@ fun AddRabotnikDialog(
                 ) {
                     OutlinedButton(
                         onClick = {
-                            onEvent(RabotnikEvent.HideDialog)
+                            onEvent(EmployeeEvent.HideDialog)
                         },
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                     ) {
@@ -156,7 +152,7 @@ fun AddRabotnikDialog(
                     Button(
                         onClick = {
                             if (!isEfficiencyEmpty.value || state.position == "Developer") {
-                                onEvent(RabotnikEvent.SaveRabotnik)
+                                onEvent(EmployeeEvent.SaveEmployee)
                             }
                         },
                         enabled = !isEfficiencyEmpty.value || state.position == "Developer"

@@ -1,112 +1,110 @@
-package com.example.myapplicationv2
+package com.example.lab5
 
-import androidx.compose.ui.unit.times
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.times
 
-class RabotnikViewModel(
-    private val dao: RabotnikDao
+class EmployeeViewModel(
+    private val dao: EmployeeDao
 ): ViewModel() {
-    val _state = MutableStateFlow(RabotnikState())
+    val _state = MutableStateFlow(EmployeeState())
 
     init {
         viewModelScope.launch {
-            dao.getAllRabotniks().collect { rabotniks ->
-                _state.value = _state.value.copy(rabotnik = rabotniks)
+            dao.getAllEmployee().collect { employee ->
+                _state.value = _state.value.copy(employee = employee)
             }
         }
     }
 
-    fun onEvent(event: RabotnikEvent) {
+    fun onEvent(event: EmployeeEvent) {
         when (event) {
-            is RabotnikEvent.DeleteRabotnik -> {
+            is EmployeeEvent.DeleteEmployee -> {
                 viewModelScope.launch {
-                    dao.deleteRabotnik(event.rabotnik)
+                    dao.deleteEmployee(event.employee)
                 }
             }
-            RabotnikEvent.HideDialog -> {
+            EmployeeEvent.HideDialog -> {
                 _state.update {
                     it.copy(
-                        isAddingRabotnik = false
+                        isAddingEmployee = false
                     )
                 }
             }
-            RabotnikEvent.ShowDialog -> {
+            EmployeeEvent.ShowDialog -> {
                 _state.update {
                     it.copy(
-                        isAddingRabotnik = true
+                        isAddingEmployee = true
                     )
                 }
             }
-            RabotnikEvent.SaveRabotnik -> {
+            EmployeeEvent.SaveEmployee -> {
                 val name = _state.value.name
                 val position = _state.value.position
                 val experience = _state.value.experience.toIntOrNull() ?: 0
                 val efficiency = _state.value.efficiency.toDoubleOrNull() ?: 0.0
-                var zarplata = _state.value.zarplata.toIntOrNull() ?: 0
+                var salary = _state.value.salary.toIntOrNull() ?: 0
                 if (experience > 5) {
-                    zarplata = (zarplata * 1.2 + 500).toInt()
+                    salary = (salary * 1.2 + 500).toInt()
                 } else if (experience > 2) {
-                    zarplata += 200
+                    salary += 200
                 }
                 if (position == "Designer" && efficiency != null) {
-                    zarplata = (zarplata * efficiency).toInt()
+                    salary = (salary * efficiency).toInt()
                 }
                 if (name.isBlank()) {
                     return
                 }
-                val rabotnik = Rabotnik(
+                val employee = Employee(
                     name = name,
-                    zarplata = zarplata,
+                    salary = salary,
                     position = position
                 )
                 viewModelScope.launch {
-                    dao.insertRabotnik(rabotnik)
+                    dao.insertEmployee(employee)
                 }
                 _state.update {
                     it.copy(
-                        isAddingRabotnik = false,
+                        isAddingEmployee = false,
                         name = "",
-                        zarplata = "",
+                        salary = "",
                         position = "Developer",
                         experience = "",
                         efficiency = ""
                     )
                 }
             }
-            is RabotnikEvent.SetName -> {
+            is EmployeeEvent.SetName -> {
                 _state.update {
                     it.copy(
                         name = event.name
                     )
                 }
             }
-            is RabotnikEvent.SetZarplata -> {
+            is EmployeeEvent.SetSalary -> {
                 _state.update {
                     it.copy(
-                        zarplata = event.zarplata
+                        salary = event.salary
                     )
                 }
             }
-            is RabotnikEvent.SetPosition -> {
+            is EmployeeEvent.SetPosition -> {
                 _state.update {
                     it.copy(
                         position = event.position
                     )
                 }
             }
-            is RabotnikEvent.SetExperience -> {
+            is EmployeeEvent.SetExperience -> {
                 _state.update {
                     it.copy(
                         experience = event.experience
                     )
                 }
             }
-            is RabotnikEvent.SetEfficiency -> {
+            is EmployeeEvent.SetEfficiency -> {
                 _state.update {
                     it.copy(
                         efficiency = event.efficiency ?: ""

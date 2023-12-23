@@ -1,4 +1,4 @@
-package com.example.myapplicationv2
+package com.example.lab5
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,22 +9,22 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.example.myapplicationv2.ui.theme.MyApplicationV2Theme
+import com.example.lab5.ui.theme.MyApplicationV2Theme
 @Suppress("UNCHECKED_CAST")
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
-            RabotnikDatabase::class.java,
-            "rabotnik.db"
+            EmployeeDatabase::class.java,
+            "employee.db"
         ).build()
     }
-    private val viewModel by viewModels<RabotnikViewModel>(
+    private val viewModel by viewModels<EmployeeViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return RabotnikViewModel(db.dao) as T
+                    return EmployeeViewModel(db.dao) as T
                 }
             }
         }
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationV2Theme {
                 val state by viewModel._state.collectAsState()
-                RabotnikScreen(state = state, onEvent = viewModel::onEvent)
+                EmployeeScreen(state = state, onEvent = viewModel::onEvent)
             }
         }
     }
